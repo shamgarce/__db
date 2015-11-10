@@ -1,201 +1,59 @@
 <?php
 
 namespace Sham\Db;
+//
+//class Db{
+//
+//      private $_config = array();
+//      private $_cacheroot     = '';
+//      private $_cache_query   = 'query_caches/';	//缓存记录
+//      private $_cache_error   = 'errlog/';		//错误/慢查询 日志
+//
+//      /**
+//       * @param string $conf
+//       * 根据配置获取设定
+//       */
+//      public function __construct($conf = array()){
+//            /**
+//             * 配置信息
+//             * */
+//            $this->_config = array(
+//                'hostname'  => $conf['hostname'],
+//                'username'  => $conf['username'],
+//                'password'  => $conf['password'],
+//                'database'  => $conf['database'],
+//                'charset'   => $conf['charset']?:'utf8',
+//                'pconnect'  => $conf['pconnect'],
+//                'quiet'     => $conf['quiet'],
+//            );
+//
+//            /**
+//             * cacheroot
+//             */
+//            $this->_cacheroot  = $conf['cachefile'];
+//
+//            //检查定义的文件目录是否存在
+//            if(!file_exists($this->_cacheroot))
+//                  $this->ErrorMsg("Sham\\Db\\Db::miss cachepath {$this->_cacheroot} with param \$config['cachefile']");
+//
+//            $path = rtrim($this->_cacheroot,'\\').$this->_cache_query;
+//            if(!is_readable($path))
+//                  is_file($path) or mkdir($path,0777);
+//
+//            $path = rtrim($this->_cacheroot,'\\').$this->_cache_error;
+//            if(!is_readable($path))
+//                  is_file($path) or mkdir($path,0777);
+//
+//
+//      }
+//
+//
+//
+//}
+//
+
 
 class Db{
-
-      private $_config = array();
-      private $_cacheroot     = '';
-      private $_cache_query   = 'query_caches/';	//缓存记录
-      private $_cache_error   = 'errlog/';		//错误/慢查询 日志
-
-
-      public $link_id     = NULL;
-      public $queryCount  = 0;
-      public $retemp      = array();              //临时结果集 gsql的结果集临时存储
-      public $queryTime   = 0;
-      public $queryLog    = array();
-      public $max_cache_time = 300; 				// 最大的缓存时间，以秒为单位
-
-      public $debug      	    = false;
-      public $error_message  = array();
-      public $platform       = '';			    //操作系统
-      public $version        = '';
-      public $dbhash         = '';			    //配置缓存文件名
-      public $starttime      = 0;
-      public $timeline       = 0;
-      public $timezone       = 0;
-      public $lifetime       = 0;			        //缓存有效时间,<=0标识关闭
-      public $slowquery      = -1;			    //慢查询记录时间 超过这个时间,进行记录
-      public $mysql_config_cache_file_time = 0;
-      public $cache_data  	= '';
-      public $cache_data_name= '';
-      public $mysql_disable_cache_tables = array();// 不允许被缓存的表，遇到将不会进行缓存
-      public $base            = '';
-      public $queryres        = null;
-      public $Config = array();                   //单例结构
-
-
-
-
-
-      /**
-       * @param string $conf
-       * 根据配置获取设定
-       */
-      public function __construct($conf = array()){
-            /**
-             * 配置信息
-             * */
-            $this->_config = array(
-                'hostname'  => $conf['hostname'],
-                'username'  => $conf['username'],
-                'password'  => $conf['password'],
-                'database'  => $conf['database'],
-                'charset'   => $conf['charset']?:'utf8',
-                'pconnect'  => $conf['pconnect'],
-                'quiet'     => $conf['quiet'],
-            );
-
-            /**
-             * cacheroot
-             */
-            $this->_cacheroot  = $conf['cachefile'];
-
-            //检查定义的文件目录是否存在
-            if(!file_exists($this->_cacheroot))
-                  $this->ErrorMsg("Sham\\Db\\Db::miss cachepath {$this->_cacheroot} with param \$config['cachefile']");
-
-            $path = rtrim($this->_cacheroot,'\\').$this->_cache_query;
-            if(!is_readable($path))
-                  is_file($path) or mkdir($path,0777);
-
-            $path = rtrim($this->_cacheroot,'\\').$this->_cache_error;
-            if(!is_readable($path))
-                  is_file($path) or mkdir($path,0777);
-
-
-      }
-
-
-      //=====================================================
-      // return true or false
-      //连接数据库
-      //=====================================================
-      private function connect()
-      {
-            $this->link_id = @mysql_connect($this->_config['dbhost'], $this->_config['dbuser'], $this->_config['dbpw'], true);         //非持久连接
-            if (!$this->link_id){
-                  if (!$this->_config['quiet'])   $this->ErrorMsg("Can't Connect MySQL Server($dbhost)!");
-                  return false;
-            }
-
-            $this->version = mysql_get_server_info($this->link_id);
-            mysql_query("
-            SET character_set_connection={$this->settings['charset']},
-            character_set_results={$this->settings['charset']},
-            character_set_client=binary",
-                $this->link_id);
-            mysql_query("SET sql_mode=''", $this->link_id);
-
-            $this->starttime = microtime(true);//time();
-            /* 选择数据库 */
-            if ($this->settings['dbname']){
-                  if (mysql_select_db($this->settings['dbname'], $this->link_id) === false ){
-                        $this->ErrorMsg("Can't select MySQL database({$this->settings['dbname']})!");
-                        return false;
-                  }else{
-                        return true;
-                  }
-            }else{
-                  return true;
-            }
-      }
-
-
-      /*
-        * //有可能执行,比如update / delete
-        * */
-      public function query($sql, $type = ''){
-            if ($this->link_id === NULL){
-                  $this->connect();
-            }
-
-            if ($this->queryCount++ <= 999){
-                  $this->queryLog[] = $sql;
-            }
-
-            if ($this->queryTime == 0){
-                  $this->queryTime = microtime(true);
-            }
-
-            /* 当当前的时间大于类初始化时间的时候，自动执行 ping 这个自动重新连接操作 */
-            if (time() > $this->starttime + 1){
-                  mysql_ping($this->link_id);
-            }
-
-            if (!($query = mysql_query($sql, $this->link_id)) && $type != 'SILENT'){
-                  $this->error_message[]['message'] = 'MySQL Query Error';
-                  $this->error_message[]['sql'] = $sql;
-                  $this->error_message[]['error'] = mysql_error($this->link_id);
-                  $this->error_message[]['errno'] = mysql_errno($this->link_id);
-                  $this->ErrorMsg();
-            }
-
-//            //记录慢查询
-//            if (($this->queryTime - $this->starttime) > $this->slowquery){
-//                  $str = $sql."\r\n".'TM : '.($this->queryTime - $this->starttime).' : '.date('Y-m-d H:i:s')."\r\n----------------------------\r\n";
-//                  $cachefile = $this->root_path . $this->err_path . 'slowquery.php';
-//                  @file_put_contents($cachefile, $str, FILE_APPEND);
-//            }
-
-
-            if ($query === false)$this->ErrorMsg("query error!");
-
-            $this->queryres = $query;
-
-            return $query;
-      }
-
-
-
-
-
-      /*
-       * 输出错误信息
-       * */
-      public function ErrorMsg($message = ''){
-            //if (!$this->settings['quiet'])
-            if ($message){
-                  echo "<b>info</b>: $message\n\n<br /><br />";
-            }else{
-                  echo "<b>MySQL server error report:";
-                  print_r($this->error_message);
-            }
-            exit;
-      }
-
-      public function close(){
-            return mysql_close($this->link_id);
-      }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-<?php
-
-namespace Seter\Library;
-
-class SDb{
       protected $properties;
       //private $settings = array();
       //下面是单例结构===================================================
