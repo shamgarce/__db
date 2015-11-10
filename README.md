@@ -1,12 +1,8 @@
-[![Latest Stable Version](https://poser.pugx.org/shampeak/wise/v/stable)](https://packagist.org/packages/shampeak/wise)
-[![Total Downloads](https://poser.pugx.org/shampeak/wise/downloads)](https://packagist.org/packages/shampeak/wise)
-[![Latest Unstable Version](https://poser.pugx.org/shampeak/wise/v/unstable)](https://packagist.org/packages/shampeak/wise)
-[![License](https://poser.pugx.org/shampeak/wise/license)](https://packagist.org/packages/shampeak/wise)
 
-WISE
+DB
 =======
 
-Package `shampeak/wise` 为程序提供配置信息支持.
+Package `shampeak/db` 为连接Mysql数据库.
 
 要点
 ------
@@ -21,7 +17,7 @@ Package `shampeak/wise` 为程序提供配置信息支持.
 文档
 ------
 
-完整的文档地址 [www.phpleague.cn/wise](http://www.phpleague.cn/wise).
+完整的文档地址 [www.phpleague.cn/db](http://www.phpleague.cn/db).
 
 系统需求
 -------
@@ -29,16 +25,17 @@ Package `shampeak/wise` 为程序提供配置信息支持.
 You need:
 
 - **PHP >= 5.4.9** , but the latest stable version of PHP is recommended
+- shampeak/wise
 
 To use the library.
 
 安装
 -------
 
-使用composer安装 `shampeak/wise` .
+使用composer安装 `shampeak/db` .
 
 ```
-$ composer require shampeak/wise dev-master
+$ composer require shampeak/db dev-master
 ```
 
 使用前
@@ -53,27 +50,7 @@ include("../vendor/autoload.php");
 -------
 
 ```
-//初始化
-$wise = Sham\Wise\Wise::getInstance([
-    'ini' => [
-        'username'    => '',
-        'dbhost'        => '125.0.0.1',
-    ],
-    'file'=>[
-        'Config'    => 'Config/Config.php',
-        'db'        => 'Config/db.php',
-    ],
-]);
 
-//载入
-$wise->load('db2','Config/Config.php');
-
-//设置参数
-$wise->C('myinfo',[]);
-$wise->C('myinfo','123123123123');
-
-//调用2
-$md = $wise('myinfo');
 ```
 
 安全
