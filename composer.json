@@ -1,0 +1,31 @@
+{
+    "name": "shampeak/db",
+    "description": "dev",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "shampeak",
+            "email": "shampeak@sina.com.cn"
+        }
+    ],
+    "require": {
+        "php" : ">=5.4.9",
+        "shampeak/wise": "dev-master"
+    },
+    "require-dev": {
+    },
+    "autoload":{
+        "psr-4":{
+            "Sham\\Db\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer", "url": "http://packagist.phpcomposer.com"
+        },
+        {
+            "packagist": false
+        }
+    ]
+}
