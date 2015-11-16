@@ -17,7 +17,7 @@
     },
     "autoload":{
         "psr-4":{
-            "Sham\\Db\\": "src"
+            "Sham\\db\\": "src"
         }
     }
 }
