@@ -1,5 +1,5 @@
 <?php
-namespace Sham\Db;
+namespace Sham\db;
 
 
 class dbconnect extends dbase{
