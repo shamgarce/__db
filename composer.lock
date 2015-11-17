@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9d709566b9766e8acafbfc90f5d2dbae",
-    "content-hash": "904d83847e2d8804e3ed2bd7144c1649",
+    "hash": "a27c9b3b4bc8c7b4870095a7989a8f87",
+    "content-hash": "f610bd4a6385e589d16bab5cc3b851b5",
     "packages": [
         {
             "name": "shampeak/wise",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/shampeak/wise.git",
-                "reference": "a51481efbc411c0c3df926a27085e9cb4d9b6cc3"
+                "reference": "708aae06feab350cf231e57db52c58267d1bb9e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shampeak/wise/zipball/a51481efbc411c0c3df926a27085e9cb4d9b6cc3",
-                "reference": "a51481efbc411c0c3df926a27085e9cb4d9b6cc3",
+                "url": "http://packagist.phpcomposer.com/files/shampeak/wise/708aae06feab350cf231e57db52c58267d1bb9e6.zip",
+                "reference": "708aae06feab350cf231e57db52c58267d1bb9e6",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Sham\\Wise\\": "src"
+                    "Sham\\wise\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -41,7 +41,7 @@
                 }
             ],
             "description": "dev",
-            "time": "2015-11-10 07:07:25"
+            "time": "2015-11-16 09:42:33"
         }
     ],
     "packages-dev": [],

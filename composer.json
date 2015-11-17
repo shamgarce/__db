@@ -19,5 +19,13 @@
         "psr-4":{
             "Sham\\db\\": "src"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "composer", "url": "http://packagist.phpcomposer.com"
+        },
+        {
+            "packagist": false
+        }
+    ]
 }
