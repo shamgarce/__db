@@ -1,8 +1,8 @@
 <?php
-namespace Sham\db;
+namespace Sham\Db;
 
 
-class dbase{
+class Dbase{
 
       public $version = '';
       public $link_id = null;

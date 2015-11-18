@@ -1,8 +1,8 @@
 <?php
-namespace Sham\db;
+namespace Sham\Db;
 
 
-class dbconnect extends dbase{
+class Dbconnect extends Dbase{
 
       public $queryCount = 0;
       public $queryTime = 0;

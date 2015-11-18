@@ -55,7 +55,7 @@ $conf['rootpath']    = './Mysql/errlog/';
  * สตภýปฏ
  */
 //$db = new Sham\Db\db($conf);
-$db =  Sham\Db\db::getInstance($conf);
+$db =  Sham\Db\Db::getInstance($conf);
 
 
 echo '<pre>';

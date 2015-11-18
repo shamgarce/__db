@@ -11,13 +11,14 @@
     ],
     "require": {
         "php" : ">=5.4.9",
+        "shampeak/base":"dev-master",
         "shampeak/wise": "dev-master"
     },
     "require-dev": {
     },
     "autoload":{
         "psr-4":{
-            "Sham\\db\\": "src"
+            "Sham\\Db\\": "src"
         }
     },
     "repositories": [

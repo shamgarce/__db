@@ -1,8 +1,8 @@
 <?php
-namespace Sham\db;
+namespace Sham\Db;
 
 
-class db extends dbconnect{
+class Db extends dbconnect{
 
       protected $properties;
       //private $settings = array();
